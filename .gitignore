@@ -1,0 +1,46 @@
+# Ye .gitignore file banao
+echo "# C++ Backend compiled files
+backend/*.o
+backend/*.exe
+backend/*.out
+backend/cloud_server
+backend/build/
+backend/bin/
+
+# Node.js Frontend dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build outputs
+dist/
+build/
+
+# Log files
+logs/
+*.log
+backend/logs/
+backend/downloads/
+backend/test_files/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.temp" > .gitignore
