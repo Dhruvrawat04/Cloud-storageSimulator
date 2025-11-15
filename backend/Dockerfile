@@ -13,15 +13,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
-COPY . /src
 
-# Build the project with static linking for jsoncpp
+# Copy all backend source files
+COPY CMakeLists.txt /src/
+COPY *.cpp /src/
+COPY *.h /src/
+
+# Build the project
 RUN mkdir -p build && cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF && \
-    cmake --build . --config Release || \
-    (echo "Build failed, attempting with dynamic linking..." && \
-     cmake .. -DCMAKE_BUILD_TYPE=Release && \
-     cmake --build . --config Release)
+    cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build . --config Release
 
 # Runtime stage
 FROM ubuntu:22.04
