@@ -12,13 +12,18 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /src
+WORKDIR /build
 
-# Copy all backend source files
+# Copy all files from backend directory
 COPY . .
 
+# List files for debugging
+RUN echo "Files in /build:" && ls -la
+
 # Build the project
-RUN mkdir -p build && cd build && \
+RUN if [ ! -f CMakeLists.txt ]; then echo "ERROR: CMakeLists.txt not found!"; ls -la; exit 1; fi && \
+    mkdir -p build && \
+    cd build && \
     cmake .. -DCMAKE_BUILD_TYPE=Release && \
     cmake --build . --config Release
 
@@ -36,7 +41,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy the built binary from builder stage
-COPY --from=builder /src/build/cloud_server /app/cloud_server
+COPY --from=builder /build/build/cloud_server /app/cloud_server
 
 # Create directories that the app might need
 RUN mkdir -p /app/downloads /app/test_files && chmod +x /app/cloud_server
