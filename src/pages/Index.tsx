@@ -27,6 +27,7 @@ const Index = () => {
   } = useBackendCloud();
 
   const activeThreads = threads.filter(t => t.status === 'RUNNING').length;
+  const totalOperations = (stats?.completedReads || 0) + (stats?.completedWrites || 0) + (stats?.completedDeletes || 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -50,7 +51,7 @@ const Index = () => {
         <CloudStats 
           cloudSize={cloudSize}
           activeThreads={activeThreads}
-          totalLogs={logs.length}
+          totalOperations={totalOperations}
           filesCount={files.length}
         />
         

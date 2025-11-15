@@ -61,11 +61,14 @@ export const FileOperations = ({ onUpload, onDownload, cloudData }: FileOperatio
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      <Card className="bg-gradient-card shadow-card border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Upload className="h-5 w-5 text-primary" />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <Card className="group bg-gradient-card shadow-card hover:shadow-hover border-0 transition-all duration-300 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
+        <CardHeader className="relative z-10">
+          <CardTitle className="flex items-center gap-3 text-xl">
+            <div className="p-2 bg-gradient-primary rounded-lg shadow-md">
+              <Upload className="h-5 w-5 text-primary-foreground" />
+            </div>
             Upload File
           </CardTitle>
         </CardHeader>
@@ -92,10 +95,13 @@ export const FileOperations = ({ onUpload, onDownload, cloudData }: FileOperatio
         </CardContent>
       </Card>
 
-      <Card className="bg-gradient-card shadow-card border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Download className="h-5 w-5 text-accent" />
+      <Card className="group bg-gradient-card shadow-card hover:shadow-hover border-0 transition-all duration-300 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl"></div>
+        <CardHeader className="relative z-10">
+          <CardTitle className="flex items-center gap-3 text-xl">
+            <div className="p-2 bg-gradient-accent rounded-lg shadow-md">
+              <Download className="h-5 w-5 text-accent-foreground" />
+            </div>
             Download Cloud Data
           </CardTitle>
         </CardHeader>
@@ -120,24 +126,27 @@ export const FileOperations = ({ onUpload, onDownload, cloudData }: FileOperatio
         </CardContent>
       </Card>
 
-      <Card className="lg:col-span-2 bg-gradient-card shadow-card border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-success" />
+      <Card className="group lg:col-span-2 bg-gradient-card shadow-card hover:shadow-hover border-0 transition-all duration-300 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-success/5 rounded-full blur-3xl"></div>
+        <CardHeader className="relative z-10">
+          <CardTitle className="flex items-center gap-3 text-xl">
+            <div className="p-2 bg-gradient-success rounded-lg shadow-md">
+              <FileText className="h-5 w-5 text-success-foreground" />
+            </div>
             Cloud Data Preview
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="bg-muted/50 rounded-lg p-4 max-h-48 overflow-y-auto">
-            <pre className="text-sm text-muted-foreground whitespace-pre-wrap">
+        <CardContent className="relative z-10">
+          <div className="bg-muted/50 backdrop-blur-sm rounded-xl p-5 max-h-48 overflow-y-auto border border-border/50 hover:border-border transition-colors">
+            <pre className="text-sm text-muted-foreground whitespace-pre-wrap font-mono">
               {cloudData.length > 1000 
                 ? cloudData.substring(0, 1000) + "\n... (truncated, " + cloudData.length + " total bytes)"
                 : cloudData || "No data in cloud storage"
               }
             </pre>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            Current cloud data size: {cloudData.length.toLocaleString()} bytes
+          <p className="text-xs text-muted-foreground mt-3 font-medium">
+            Current cloud data size: <span className="text-success font-bold">{cloudData.length.toLocaleString()}</span> bytes
           </p>
         </CardContent>
       </Card>
