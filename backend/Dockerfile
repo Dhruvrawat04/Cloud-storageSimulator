@@ -14,15 +14,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /build
 
-# Copy all files from backend directory
-COPY . .
-
-# List files for debugging
-RUN echo "Files in /build:" && ls -la
+# Copy backend source files (build context is repo root)
+COPY backend/CMakeLists.txt .
+COPY backend/*.cpp .
+COPY backend/*.h .
 
 # Build the project
-RUN if [ ! -f CMakeLists.txt ]; then echo "ERROR: CMakeLists.txt not found!"; ls -la; exit 1; fi && \
-    mkdir -p build && \
+RUN mkdir -p build && \
     cd build && \
     cmake .. -DCMAKE_BUILD_TYPE=Release && \
     cmake --build . --config Release

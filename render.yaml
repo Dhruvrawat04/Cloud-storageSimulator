@@ -6,8 +6,7 @@ services:
     region: oregon
     plan: free
     branch: main
-    rootDir: backend
-    dockerfile: ./Dockerfile
+    dockerfile: ./backend/Dockerfile
     envVars:
       - key: PORT
         value: 3001
