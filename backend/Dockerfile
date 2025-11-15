@@ -15,16 +15,19 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /src
 COPY . /src
 
-# Build the project
+# Build the project with static linking for jsoncpp
 RUN mkdir -p build && cd build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build . --config Release
+    cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF && \
+    cmake --build . --config Release || \
+    (echo "Build failed, attempting with dynamic linking..." && \
+     cmake .. -DCMAKE_BUILD_TYPE=Release && \
+     cmake --build . --config Release)
 
 # Runtime stage
-FROM debian:stable-slim
+FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install runtime dependencies only
+# Install only minimal runtime dependencies
 RUN apt-get update && apt-get install -y \
     libstdc++6 \
     libjsoncpp25 \
@@ -37,7 +40,7 @@ WORKDIR /app
 COPY --from=builder /src/build/cloud_server /app/cloud_server
 
 # Create directories that the app might need
-RUN mkdir -p /app/downloads /app/test_files
+RUN mkdir -p /app/downloads /app/test_files && chmod +x /app/cloud_server
 
 # Expose port (default 3001, can be overridden via PORT env var)
 EXPOSE 3001
