@@ -1,0 +1,33 @@
+# fly.toml app configuration file for cloud-sim-server
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = "cloud-sim-server"
+primary_region = "maa"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "3001"
+
+[[services]]
+  internal_port = 3001
+  processes = ["app"]
+  protocol = "tcp"
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [services.tcp_checks]
+    enabled = true
+    grace_period = "5s"
+    interval = "15s"
+    timeout = "2s"
