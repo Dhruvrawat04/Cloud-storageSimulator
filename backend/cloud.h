@@ -62,17 +62,18 @@ extern pthread_mutex_t log_mutex;
 extern pthread_mutex_t stats_mutex;
 extern int read_count;
 
-// Operation counters
+// Global statistics
+extern std::map<std::string, OperationStats> global_stats;
+extern std::vector<OperationTiming> detailed_timings;
+
+// Runtime counters (defined in cloud_storage.cpp)
+extern int total_operations;
 extern int active_readers;
 extern int active_writers;
 extern int active_deleters;
 extern int completed_reads;
 extern int completed_writes;
 extern int completed_deletes;
-
-// Global statistics
-extern std::map<std::string, OperationStats> global_stats;
-extern std::vector<OperationTiming> detailed_timings;
 
 // Thread function prototypes
 void* reader(void* arg);
@@ -90,9 +91,13 @@ void log_real_time_status(const std::string& message);
 
 // Statistics functions
 void update_statistics(const std::string& operation, const OperationTiming& timing);
-void update_operation_stats(const std::string& operation, double duration, bool started);
 void print_performance_report();
 void reset_statistics();
+
+// Statistics/timing control (implemented in cloud_storage.cpp)
+void update_operation_stats(const std::string& operation, double duration, bool started);
+void initialize_timing_system();
+void cleanup_timing_system();
 
 // Utility functions
 std::string getRandomTestFile();
@@ -108,4 +113,13 @@ void run_stress_test(int num_threads);
 std::chrono::high_resolution_clock::time_point get_current_time();
 long long get_microseconds_since(const std::chrono::high_resolution_clock::time_point& start);
 
+
+void run_cloud_simulator();
+void run_stress_test(int num_threads);
+void print_performance_report();
+
+// Cloud integration functions
+void run_cloud_storage_demo();
+void run_cloud_stress_test();
+void show_cloud_performance_report();
 #endif // CLOUD_H

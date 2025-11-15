@@ -1,25 +1,29 @@
 #!/bin/bash
 
-echo "Building Cloud Storage Server..."
+echo "Building Cloud Storage C++ Server..."
 
-# Check if httplib.h exists
-if [ ! -f "httplib.h" ]; then
-    echo "Downloading httplib.h..."
-    wget https://raw.githubusercontent.com/yhirose/cpp-httplib/master/httplib.h
-fi
+cd "$(dirname "$0")"
 
-# Install dependencies on Ubuntu/Debian
-echo "Installing dependencies..."
-sudo apt-get update
-sudo apt-get install -y build-essential cmake libjsoncpp-dev pkg-config
+# Create necessary directories
+mkdir -p downloads test_files
 
-# Clean and create build directory
+# Create build directory
 rm -rf build
 mkdir -p build
 cd build
 
-# Configure and build
-cmake ..
-make
+# Configure with CMake
+echo "Configuring with CMake..."
+cmake .. -DCMAKE_BUILD_TYPE=Release
 
-echo "Build complete! Run with: ./cloud_server"
+# Build
+echo "Building..."
+make -j$(nproc)
+
+if [ -f "cloud_server" ]; then
+    echo "Build successful!"
+    exit 0
+else
+    echo "Build failed - cloud_server executable not found"
+    exit 1
+fi

@@ -8,7 +8,7 @@ rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 
 # Copy source files to WSL directory
-cp -r /mnt/c/Users/capdh/desktop/cloud_storage/backend/* "$BUILD_DIR/"
+cp -r /mnt/c/Users/deepa/Downloads/cloud_storage/backend/* "$BUILD_DIR/"
 cd "$BUILD_DIR"
 
 # Check if httplib.h exists or is just a placeholder

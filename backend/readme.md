@@ -31,7 +31,7 @@ brew install cmake jsoncpp wget
 
 1. Make the build script executable:
 ```bash
-chmod +x build.sh
+chmod +x build-wsl.sh
 ```
 
 2. Run the build script:

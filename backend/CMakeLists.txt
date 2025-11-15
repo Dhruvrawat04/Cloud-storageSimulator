@@ -22,6 +22,13 @@ add_executable(cloud_server
     main.cpp
     cloud_storage.cpp
     cloud_rw.cpp
+    process_scheduler.cpp
+    file_system.cpp
+    ipc_manager.cpp
+    deadlock_detector.cpp
+    os_demo_ui.cpp
+    cloud_integration.cpp
+    cloud_simulator.cpp
 )
 
 # Link libraries
