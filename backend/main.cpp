@@ -1028,8 +1028,12 @@ int main() {
         res.set_content(json_string, "application/json");
     });
     
-    std::cout << "Cloud Storage Server starting on http://localhost:3001" << std::endl;
-    server.listen("0.0.0.0", 3001);
+    // Read PORT from environment variable (default 3001)
+    const char* portEnv = std::getenv("PORT");
+    int port = portEnv ? std::atoi(portEnv) : 3001;
+    
+    std::cout << "Cloud Storage Server starting on http://0.0.0.0:" << port << std::endl;
+    server.listen("0.0.0.0", port);
     
     return 0;
 }
