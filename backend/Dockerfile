@@ -15,9 +15,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /src
 
 # Copy all backend source files
-COPY CMakeLists.txt /src/
-COPY *.cpp /src/
-COPY *.h /src/
+COPY . .
 
 # Build the project
 RUN mkdir -p build && cd build && \
