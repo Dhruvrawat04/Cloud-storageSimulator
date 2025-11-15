@@ -1,0 +1,12 @@
+# render.yaml - Render deployment configuration
+services:
+  - type: web
+    name: cloud-sim-server
+    runtime: docker
+    region: oregon
+    plan: free
+    branch: main
+    dockerfile: ./backend/Dockerfile
+    envVars:
+      - key: PORT
+        value: 3001
