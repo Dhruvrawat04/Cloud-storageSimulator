@@ -23,6 +23,8 @@ export default function OSSimulator() {
   const [waitForGraph, setWaitForGraph] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [schedulingActive, setSchedulingActive] = useState(false);
+  const [lastAlgorithm, setLastAlgorithm] = useState<string | null>(null);
+  const [lastQuantum, setLastQuantum] = useState<number>(2);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -80,11 +82,13 @@ export default function OSSimulator() {
     return () => clearInterval(interval);
   }, [schedulingActive]);
 
-  const runProcessScheduler = async (algorithm: string) => {
+  const runProcessScheduler = async (algorithm: string, quantum: number = 2) => {
     setLoading(true);
     setSchedulingActive(true);
+    setLastAlgorithm(algorithm);
+    setLastQuantum(quantum);
     try {
-      const result = await cloudApi.scheduleProcesses(algorithm, 2, 5);
+      const result = await cloudApi.scheduleProcesses(algorithm, quantum, 5);
       setProcessStats(result);
       toast({
         title: 'Process Scheduler',
@@ -261,7 +265,25 @@ export default function OSSimulator() {
       const result = await cloudApi.deleteProcess(selectedProcess.pid);
       
       if (result.success) {
-        await cloudApi.getProcessStats().then(setProcessStats);
+        // Fetch updated stats (backend already re-ran scheduler if needed)
+        const updatedStats = await cloudApi.getProcessStats();
+        
+        // If no processes left, clear the Gantt chart and reset scheduling state
+        if (!updatedStats.processes || updatedStats.processes.length === 0) {
+          setProcessStats({
+            ...updatedStats,
+            ganttChart: [],
+            averageWaitingTime: 0,
+            averageTurnaroundTime: 0,
+            algorithm: 'None',
+            processCount: 0,
+          });
+          setSchedulingActive(false);
+          setLastAlgorithm(null);
+        } else {
+          setProcessStats(updatedStats);
+        }
+        
         toast({
           title: 'Process Deleted',
           description: `${result.deletedProcess.processName} (P${result.deletedProcess.pid}) deleted successfully`,
@@ -536,28 +558,28 @@ export default function OSSimulator() {
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <Button 
-                    onClick={() => runProcessScheduler('FCFS')} 
+                    onClick={() => runProcessScheduler('FCFS', 2)} 
                     disabled={loading}
                     className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
                   >
                     FCFS
                   </Button>
                   <Button 
-                    onClick={() => runProcessScheduler('SJF')} 
+                    onClick={() => runProcessScheduler('SJF', 2)} 
                     disabled={loading}
                     className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                   >
                     SJF
                   </Button>
                   <Button 
-                    onClick={() => runProcessScheduler('RR')} 
+                    onClick={() => runProcessScheduler('RR', 3)} 
                     disabled={loading}
                     className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
                   >
                     Round Robin
                   </Button>
                   <Button 
-                    onClick={() => runProcessScheduler('PRIORITY')} 
+                    onClick={() => runProcessScheduler('PRIORITY', 2)} 
                     disabled={loading}
                     className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
                   >
