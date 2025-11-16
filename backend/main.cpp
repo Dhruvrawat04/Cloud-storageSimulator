@@ -462,9 +462,13 @@ void setup_os_routes(Server &server) {
             // Create and add the process
             int pid = process_scheduler.getNextPid();
             Process newProcess(pid, processName, arrivalTime, burstTime, priority);
-            // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
             process_scheduler.addProcess(newProcess);
-            // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
+            
+            // Re-run the last scheduling algorithm if one was executed
+            if (!last_scheduling_algorithm.empty()) {
+                process_scheduler.resetProcessStates();
+                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);
+            }
             
             response["success"] = true;
             response["message"] = "Process added successfully";
@@ -504,85 +508,59 @@ void setup_os_routes(Server &server) {
             int priority = request_body.get("priority", 1).asInt();
             
             bool success = process_scheduler.editProcessAPI(pid, processName, arrivalTime, burstTime, priority);
-                        // Re-run the last scheduling algorithm if one was executed            if (success && !last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
+            
+            // Re-run the last scheduling algorithm if one was executed
+            if (success && !last_scheduling_algorithm.empty()) {
+                process_scheduler.resetProcessStates();
+                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);
+            }
             
             if (success) {
                 Process* proc = process_scheduler.findProcess(pid);
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["success"] = true;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["message"] = "Process updated successfully";
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["process"]["pid"] = proc->pid;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["process"]["processName"] = proc->process_name;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["process"]["arrivalTime"] = proc->arrival_time;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["process"]["burstTime"] = proc->burst_time;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["process"]["priority"] = proc->priority;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
             } else {
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["success"] = false;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
                 response["error"] = "Process not found or invalid parameters";
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
             }
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         } else {
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
             response["success"] = false;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
             response["error"] = "Invalid request body";
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         }
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         Json::StreamWriterBuilder builder;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         std::string json_string = Json::writeString(builder, response);
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         res.set_content(json_string, "application/json");
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
     });
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
     
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
     // Delete process endpoint
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
     server.Delete(R"(/api/os/processes/(\d+))", [](const Request &req, Response &res) {
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         setup_cors(res);
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         Json::Value response;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         // Extract pid from path
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         std::string path = req.path;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         std::string prefix = "/api/os/processes/";
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         int pid = std::stoi(path.substr(prefix.length()));
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         std::lock_guard<std::mutex> lock(process_mutex);
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         Process* proc = process_scheduler.findProcess(pid);
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
         if (proc) {
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
             std::string processName = proc->process_name;
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
             process_scheduler.deleteProcess(pid);
-                        // Re-run the last scheduling algorithm if one was executed            if (!last_scheduling_algorithm.empty()) {                process_scheduler.resetProcessStates();                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);            }
+            
+            // Re-run the last scheduling algorithm if one was executed
+            if (!last_scheduling_algorithm.empty()) {
+                process_scheduler.resetProcessStates();
+                process_scheduler.executeScheduler(last_scheduling_algorithm, last_scheduling_quantum);
+            }
+            
             response["success"] = true;
             response["message"] = "Process deleted successfully";
             response["deletedProcess"]["pid"] = pid;
@@ -1028,12 +1006,8 @@ int main() {
         res.set_content(json_string, "application/json");
     });
     
-    // Read PORT from environment variable (default 3001)
-    const char* portEnv = std::getenv("PORT");
-    int port = portEnv ? std::atoi(portEnv) : 3001;
-    
-    std::cout << "Cloud Storage Server starting on http://0.0.0.0:" << port << std::endl;
-    server.listen("0.0.0.0", port);
+    std::cout << "Cloud Storage Server starting on http://localhost:3001" << std::endl;
+    server.listen("0.0.0.0", 3001);
     
     return 0;
 }
