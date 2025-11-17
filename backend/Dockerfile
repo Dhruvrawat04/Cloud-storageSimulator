@@ -15,9 +15,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /build
 
 # Copy backend source files (build context is repo root)
-COPY backend/CMakeLists.txt .
-COPY backend/*.cpp .
-COPY backend/*.h .
+# Copy all .cpp and .h files recursively to ensure nothing is missed
+COPY backend/ .
 
 # Build the project
 RUN mkdir -p build && \
