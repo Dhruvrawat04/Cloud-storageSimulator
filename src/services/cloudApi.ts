@@ -149,6 +149,15 @@ export const cloudApi = {
     if (!response.ok) throw new Error('Failed to start stress test');
   },
 
+  async clearThreads(): Promise<{ success: boolean; terminatedCount: number }> {
+    const response = await fetch(`${API_BASE_URL}/threads`, {
+      method: 'DELETE',
+    });
+    
+    if (!response.ok) throw new Error('Failed to clear threads');
+    return response.json();
+  },
+
   // Logs
   async getLogs(): Promise<BackendLog[]> {
     const response = await fetch(`${API_BASE_URL}/logs`);
