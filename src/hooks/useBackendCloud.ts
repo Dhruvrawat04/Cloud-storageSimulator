@@ -190,16 +190,28 @@ export const useBackendCloud = () => {
   }, [fetchThreads, fetchStats, fetchLogs, toast]);
 
   // Clear threads (just refresh the list)
-  const clearThreads = useCallback(() => {
-    setThreads([]);
-    setShouldPollThreads(false);
-    toast({
-      title: 'Threads cleared',
-      description: 'Thread list has been cleared',
-    });
-    // Resume polling after 5 seconds
-    setTimeout(() => setShouldPollThreads(true), 5000);
-  }, [toast]);
+  const clearThreads = useCallback(async () => {
+    try {
+      const result = await cloudApi.clearThreads();
+      setThreads([]);
+      setShouldPollThreads(false);
+      toast({
+        title: 'Threads cleared',
+        description: `${result.terminatedCount} thread(s) terminated successfully`,
+      });
+      // Resume polling after 2 seconds
+      setTimeout(() => {
+        setShouldPollThreads(true);
+        fetchThreads();
+      }, 2000);
+    } catch (error) {
+      toast({
+        title: 'Failed to clear threads',
+        description: 'Could not terminate threads',
+        variant: 'destructive',
+      });
+    }
+  }, [toast, fetchThreads]);
 
   // Initial connection check and data fetch
   useEffect(() => {

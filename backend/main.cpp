@@ -322,6 +322,39 @@ void setup_thread_routes(Server &server) {
         std::string json_string = Json::writeString(builder, response);
         res.set_content(json_string, "application/json");
     });
+    
+    // Clear/terminate all threads endpoint
+    server.Delete("/api/threads", [](const Request &req, Response &res) {
+        setup_cors(res);
+        Json::Value response;
+        
+        std::lock_guard<std::mutex> lock(api_mutex);
+        
+        int terminated_count = 0;
+        pthread_mutex_lock(&stats_mutex);
+        
+        // Detach all managed threads (they will complete naturally)
+        for (auto& [id, thread] : managed_threads) {
+            pthread_detach(thread);
+            terminated_count++;
+        }
+        managed_threads.clear();
+        
+        // Reset thread statistics
+        active_readers = 0;
+        active_writers = 0;
+        active_deleters = 0;
+        
+        pthread_mutex_unlock(&stats_mutex);
+        
+        response["success"] = true;
+        response["message"] = "All threads cleared";
+        response["terminatedCount"] = terminated_count;
+        
+        Json::StreamWriterBuilder builder;
+        std::string json_string = Json::writeString(builder, response);
+        res.set_content(json_string, "application/json");
+    });
 }
 
 // OS Module endpoints

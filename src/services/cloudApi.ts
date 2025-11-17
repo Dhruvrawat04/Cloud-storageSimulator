@@ -1,13 +1,4 @@
-// Get API base URL from environment variable, fallback to relative path for local dev
-const API_BASE_URL = import.meta.env.VITE_API_URL 
-  ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api`  // Remove trailing slash if present
-  : '/api';
-
-// Log for debugging
-if (typeof window !== 'undefined') {
-  console.log('API Base URL:', API_BASE_URL);
-  console.log('VITE_API_URL env:', import.meta.env.VITE_API_URL);
-}
+const API_BASE_URL = '/api';
 
 export interface BackendStats {
   totalFiles: number;
